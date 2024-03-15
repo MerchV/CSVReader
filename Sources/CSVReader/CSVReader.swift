@@ -29,6 +29,8 @@ public struct CSVReader {
     private let THIRD_RANGE = 3
     
     
+    public init() {}
+    
     /// read
     /// - Parameter url: The local file location.
     /// - Returns: An array of dictionaries representing each line in the CSV file.
