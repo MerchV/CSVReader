@@ -3,10 +3,11 @@ import XCTest
 
 class CSVReaderTests: XCTestCase {
     
-    func test_csv_reader() throws {
+    func test_speed() throws { /// 1min 22s
         let reader = CSVReader()
-        let url = Bundle.module.url(forResource: "csv/stops.txt", withExtension: nil)!
-        let values = try  reader.read(from: url)
-        XCTAssert(values.count == 13038)
+        let url = Bundle.module.url(forResource: "csv/stop_times.txt", withExtension: nil)!
+        let values = try reader.read(from: url, keys: ["trip_id", "stop_id"])
+        XCTAssert(values.count == 3742960)
+
     }
 }
