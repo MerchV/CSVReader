@@ -1,3 +1,3 @@
 # CSVReader
 
-A description of this package.
+Read and parse a .csv file which may include values with quotes which contain commas.
