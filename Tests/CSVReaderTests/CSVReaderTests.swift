@@ -1,11 +1,12 @@
 import XCTest
 @testable import CSVReader
 
-final class CSVReaderTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(CSVReader().text, "Hello, World!")
+class CSVReaderTests: XCTestCase {
+    
+    func test_csv_reader() throws {
+        let reader = CSVReader()
+        let url = Bundle.module.url(forResource: "csv/stops.txt", withExtension: nil)!
+        let values = try  reader.read(from: url)
+        XCTAssert(values.count == 13038)
     }
 }
