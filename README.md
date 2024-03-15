@@ -4,4 +4,4 @@ Read and parse a .csv file which may include values with quotes which contain co
 
 This is the regular expression I used:
 
-```"(?:\"(.*)\",)|(?:([^,]*),)|([^,]*)"```
+```(?:\"(.*)\",)|(?:([^,]*),)|([^,]*)```
