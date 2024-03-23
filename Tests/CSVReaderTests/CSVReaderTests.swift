@@ -11,13 +11,19 @@ class CSVReaderTests: XCTestCase {
         XCTAssert(values.count == 13038)
 
     }
-    
-    /// Consumes 23 GB of memory. The file `stop_times.txt` is git ignored since it is 210 MB.
+       
+    /// Consumes 5.7 GB of memory. The file `stop_times.txt` is git ignored since it is 210 MB.
+    /// `stop_times.txt` has 3743221 value lines.
+    /// 3743221 = 5.7 GB
+    /// 1871610 = 3.0 GB
     func test_memory() throws {
         let url = Bundle.module.url(forResource: "csv/stop_times.txt", withExtension: nil)!
         let reader = try CSVReader(url: url, keys: ["trip_id", "stop_id"])
-        let values = try reader.next(lines: 1624557)
-        XCTAssert(values.count == 1624557)
+        var values = try reader.next(lines: 1871610)
+        XCTAssert(values.count == 1871610)
+
+        values = try reader.next(lines: 1871610)
+        XCTAssert(values.count == 1871610)
 
     }
     
