@@ -44,3 +44,5 @@ Calling `.next` with a number greater than the number of lines in the CSV won't 
 To get all lines, call `.all`.
 
 To check if there are remaning lines to be read use `.hasNext`.
+
+If what you want to do is to import a .csv file into your database, check for a command such as `COPY` for Postgres which can be performed from a terminal or over a connection.
