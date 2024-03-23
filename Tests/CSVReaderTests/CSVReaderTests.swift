@@ -70,5 +70,17 @@ class CSVReaderTests: XCTestCase {
         let _ = try reader.next(lines: 999)
         XCTAssertFalse(reader.hasNext())
     }
+    
+    func test_only_header_is_empty() throws {
+        let url = Bundle.module.url(forResource: "csv/only_header.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["one", "two", "three"], separator: "\n")
+        let lines = try reader.next(lines: 1)
+        XCTAssert(lines.count == 0)
+    }
 
+    func test_only_header_has_next_false() throws {
+        let url = Bundle.module.url(forResource: "csv/only_header.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["one", "two", "three"], separator: "\n")
+        XCTAssertFalse(reader.hasNext())
+    }
 }
