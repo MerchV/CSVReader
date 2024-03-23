@@ -18,10 +18,12 @@ public class CSVReader {
     
     /// Represents a line in a CSV file, after the first header line.
     /// Example 1: `a,b,c,d,e`. This will produce 5 matches, with `a`, `b`, `c`, and `d` in the second group, and `e` in the third group.
-    /// Example 2: `a,"b",c,d,e`. This will prouce 5 matches, with `a` in the second group, `b` in the first group without quotes, `c` and `d` in the second group, and `e` in the third group.
+    /// Example 2: `a,"b",c,d,e`. This will produce 5 matches, with `a` in the second group, `b` in the first group without quotes, `c` and `d` in the second group, and `e` in the third group.
+    /// Example 3: `"a,a","b,b",c,d,e`. This will produce 5 matches, with `a,a` and `b,b` in the second group, `c` and `d` in the second group, and `e` in the third group.
     /// The `(?:)` is used to exclude the quotes in the first group, and the comma in the second group.
-    /// Explanation: Match a string with quotes separated by a comma but exclude the quotes and comma from the group, or match a string without a comma separated by a comma, or match a string without a comma until the end.
-    private let PATTERN = "(?:\"(.*)\",)|(?:([^,]*),)|([^,]*)"
+    /// Explanation: Match a string without quotes starting and ending with quotes separated by a comma but exclude the quotes and comma from the group, or match a string without a comma separated by a comma, or match a string without a comma until the end.
+    /// THIS DOES NOT WORK IF THE LAST VALUE AFTER THE FINAL COMMA HAS QUOTATION MARKS AND AN INTERNAL COMMA.
+    private let PATTERN = "(?:\"([^\"]*)\",)|(?:([^,]*),)|([^,]*)"
     
     /// The group with quotes.
     private let FIRST_RANGE = 1
@@ -49,7 +51,7 @@ public class CSVReader {
     /// - Parameters:
     ///   - url: The local file.
     ///   - keys: The headers.
-    ///   - separator: The whitespace characters at the end of each line, likely `\r` or `\n` or both.
+    ///   - separator: The whitespace characters at the end of each line, likely `\n` or `\r\n`.
     public init(url: URL, keys: [String], separator: String? = "\r\n") throws {
         self.keys = keys
         guard FileManager.default.fileExists(atPath: url.path) else { throw CSVReaderError.fileNotFound }
@@ -73,14 +75,21 @@ public class CSVReader {
         }
     }
     
+    /// Get all value lines in the CSV.
+    /// - Returns: An array of dictionaries, each dictionary representing a line, with the key as the text from the header.
+    public func all() throws -> [[String: String]] {
+        try next(lines: self.valueLines.count)
+    }
+    
     /// Reading from the CSV is done incrementally since a very large CSV file can use a lot of memory. For example, a CSV file with 3,743,221 lines can use 23 GB of memory to convert into an array of dictionaries.
     /// - Parameter lines: The number of lines to read.
-    /// - Returns: An array of dictionaries, each dictionary representing a line, with the key the text from the header.
+    /// - Returns: An array of dictionaries, each dictionary representing a line, with the key as the text from the header.
     public func next(lines: Int) throws -> [[String: String]] {
         var res = [[String: String]]()
         
         /// Check that the requested number of lines does not exceed the number of lines in the CSV file.
         let upto = readLines + lines > self.valueLines.count ? self.valueLines.count : readLines + lines
+        
         
         for i in readLines..<upto {
             let line = self.valueLines[i]
@@ -97,6 +106,11 @@ public class CSVReader {
             res.append(newMap)
             
         }
+        
+        /// Keep track of how many lines we've read.
+        self.readLines = upto
+
+        
         return res
     }
     
