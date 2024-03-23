@@ -42,3 +42,5 @@ let line3 = batch2[0]
 Calling `.next` with a number greater than the number of lines in the CSV won't throw an exception.
 
 To get all lines, call `.all`.
+
+To check if there are remaning lines to be read use `.hasNext`.
