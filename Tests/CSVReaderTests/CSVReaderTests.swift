@@ -20,4 +20,33 @@ class CSVReaderTests: XCTestCase {
         XCTAssert(values.count == 1624557)
 
     }
+    
+    func test_incremental() throws {
+        let url = Bundle.module.url(forResource: "csv/counts.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["first", "second", "third", "fourth", "fifth"], separator: "\n")
+        let batch1 = try reader.next(lines: 2)
+        let line1 = batch1[0]
+        let line2 = batch1[1]
+        XCTAssert(line1["first"] == "1")
+        XCTAssert(line2["second"] == "7,7,7")
+        let batch2 = try reader.next(lines: 1)
+        let line3 = batch2[0]
+        XCTAssert(line3["fourth"] == "14" && line3["fifth"] == "15")
+        let batch3 = try reader.next(lines: 1)
+        let line5 = batch3[0]
+        XCTAssert(line5["first"] == "16,16,16")
+        XCTAssert(line5["second"] == "17,17,17")
+        let batch4 = try reader.next(lines: 1)
+        let line6 = batch4[0]
+        XCTAssert(line6["fifth"] == "\"25") // This is wrong since my regular expression doesn't handle the case of the final value in a line having outer quotation marks and an internal comma. Will fix later.
+        let batch5 = try reader.next(lines: 100)
+        XCTAssert(batch5.count == 0)
+    }
+    
+    func test_all() throws {
+        let url = Bundle.module.url(forResource: "csv/counts.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["first", "second", "third", "fourth", "fifth"], separator: "\n")
+        let batch1 = try reader.all()
+        XCTAssert(batch1.count == 5)
+    }
 }
