@@ -10,7 +10,7 @@ Flaw: It does not handle the case of the final value in each line after the last
 
 Usage:
 ```
-let reader = try CSVReader(url: URL, keys: [String], separator: String?)
+let reader = try CSVReader(url: URL, keys: [String], separator: String? = "\r\n")
 let values = try reader.next(10)
 ```
 
@@ -40,3 +40,5 @@ let line3 = batch2[0]
 `line3["fourth"]` is `"14"`
 
 Calling `.next` with a number greater than the number of lines in the CSV won't throw an exception.
+
+To get all lines, call `.all`.
