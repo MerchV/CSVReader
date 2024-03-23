@@ -75,6 +75,12 @@ public class CSVReader {
         }
     }
     
+    /// Determine if there are any more lines remaining to read.
+    /// - Returns: Boolean.
+    public func hasNext() -> Bool {
+        self.readLines < self.valueLines.count
+    }
+    
     /// Get all value lines in the CSV.
     /// - Returns: An array of dictionaries, each dictionary representing a line, with the key as the text from the header.
     public func all() throws -> [[String: String]] {

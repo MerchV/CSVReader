@@ -49,4 +49,26 @@ class CSVReaderTests: XCTestCase {
         let batch1 = try reader.all()
         XCTAssert(batch1.count == 5)
     }
+    
+    func test_has_next_true() throws {
+        let url = Bundle.module.url(forResource: "csv/counts.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["first", "second", "third", "fourth", "fifth"], separator: "\n")
+        let _ = try reader.next(lines: 4)
+        XCTAssertTrue(reader.hasNext())
+    }
+    
+    func test_has_next_false() throws {
+        let url = Bundle.module.url(forResource: "csv/counts.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["first", "second", "third", "fourth", "fifth"], separator: "\n")
+        let _ = try reader.next(lines: 5)
+        XCTAssertFalse(reader.hasNext())
+    }
+    
+    func test_has_next_false_past_end() throws {
+        let url = Bundle.module.url(forResource: "csv/counts.csv", withExtension: nil)!
+        let reader = try CSVReader(url: url, keys: ["first", "second", "third", "fourth", "fifth"], separator: "\n")
+        let _ = try reader.next(lines: 999)
+        XCTAssertFalse(reader.hasNext())
+    }
+
 }
