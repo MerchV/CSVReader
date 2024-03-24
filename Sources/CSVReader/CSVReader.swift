@@ -136,6 +136,8 @@ public class CSVReader {
     
     /// Match each line in the CSV file with the regular expression.
     private func parse(line: String) -> [String] {
+        line.components(separatedBy: ",")
+        /*
         var res = [String]()
         let matches = regex.matches(in: line, range: NSRange(location: 0, length: line.count))
         for match in matches {
@@ -147,5 +149,7 @@ public class CSVReader {
             }
         }
         return res
+         
+         */
     }
 }
