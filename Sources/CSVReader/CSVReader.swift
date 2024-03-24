@@ -23,7 +23,7 @@ public class CSVReader {
     /// The `(?:)` is used to exclude the quotes in the first group, and the comma in the second group.
     /// Explanation: Match a string without quotes starting and ending with quotes separated by a comma but exclude the quotes and comma from the group, or match a string without a comma separated by a comma, or match a string without a comma until the end.
     /// THIS DOES NOT WORK IF THE LAST VALUE AFTER THE FINAL COMMA HAS QUOTATION MARKS AND AN INTERNAL COMMA.
-    private let regex = try! NSRegularExpression(pattern: "(?:\"([^\"]*)\",)|(?:([^,]*),)|([^,]*)")
+//    private let regex = try! NSRegularExpression(pattern: "(?:\"([^\"]*)\",)|(?:([^,]*),)|([^,]*)")
     
     /// The group with quotes.
     private let FIRST_RANGE = 1
@@ -92,6 +92,7 @@ public class CSVReader {
     /// - Returns: An array of dictionaries, each dictionary representing a line, with the key as the text from the header.
     public func next(lines: Int) throws -> [[String: String]] {
         var res = [[String: String]]()
+        return res
         
         /// Check that the requested number of lines does not exceed the number of lines in the CSV file.
         let upto = readLines + lines > self.valueLines.count ? self.valueLines.count : readLines + lines
