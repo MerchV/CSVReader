@@ -92,7 +92,6 @@ public class CSVReader {
     /// - Returns: An array of dictionaries, each dictionary representing a line, with the key as the text from the header.
     public func next(lines: Int) throws -> [[String: String]] {
         var res = [[String: String]]()
-        return res
         
         /// Check that the requested number of lines does not exceed the number of lines in the CSV file.
         let upto = readLines + lines > self.valueLines.count ? self.valueLines.count : readLines + lines
@@ -103,12 +102,15 @@ public class CSVReader {
             var newMap = [String: String]()
             let parsed = parse(line: line)
             
-            for keyString in keys {
-                guard let index = keyToIndex[keyString] else { continue }
-                guard index < parsed.count else { continue }
-                let valueString = parsed[index]
-                newMap[keyString] = valueString
-            }
+            newMap["trip_id"] = "parsed[0]"
+            newMap["stop_id"] = "parsed[1]"
+            
+//            for keyString in keys {
+//                guard let index = keyToIndex[keyString] else { continue }
+//                guard index < parsed.count else { continue }
+//                let valueString = parsed[index]
+//                newMap[keyString] = valueString
+//            }
             
             res.append(newMap)
             
@@ -137,20 +139,19 @@ public class CSVReader {
     
     /// Match each line in the CSV file with the regular expression.
     private func parse(line: String) -> [String] {
-        line.components(separatedBy: ",")
-        /*
-        var res = [String]()
-        let matches = regex.matches(in: line, range: NSRange(location: 0, length: line.count))
-        for match in matches {
-            
-            /// First check if it matches the quoted value, then check if it matches an unquoted value, then check if it matches the trailing value after the final comma.
-            if let range = Range(match.range(at: FIRST_RANGE), in: line) ?? Range(match.range(at: SECOND_RANGE), in: line) ?? Range(match.range(at: THIRD_RANGE), in: line) {
-                let value = line[range]
-                res.append(String(value))
-            }
-        }
-        return res
+        return line.components(separatedBy: ",")
+//        var res = [String]()
+//        let matches = regex.matches(in: line, range: NSRange(location: 0, length: line.count))
+//        for match in matches {
+//            
+//            /// First check if it matches the quoted value, then check if it matches an unquoted value, then check if it matches the trailing value after the final comma.
+//            if let range = Range(match.range(at: FIRST_RANGE), in: line) ?? Range(match.range(at: SECOND_RANGE), in: line) ?? Range(match.range(at: THIRD_RANGE), in: line) {
+//                let value = line[range]
+//                res.append(String(value))
+//            }
+//        }
+//        return res
          
-         */
+         
     }
 }
